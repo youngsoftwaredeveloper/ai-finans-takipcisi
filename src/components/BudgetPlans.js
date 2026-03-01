@@ -2,43 +2,42 @@
 
 import { Target, PieChart, Sparkles, PlusCircle } from "lucide-react";
 
-const BUDGET_PLANS = [
-    {
-        id: "50-30-20",
-        title: "The 50/30/20 Rule",
-        description: "Balanced allocation for stable financial growth.",
-        breakdown: [
-            { category: "Housing & Bills", percent: 50, color: "bg-indigo-500" },
-            { category: "Food & Fun", percent: 30, color: "bg-orange-500" },
-            { category: "Savings", percent: 20, color: "bg-emerald-500" }
-        ],
-        icon: <Target className="w-5 h-5 text-indigo-500" />
-    },
-    {
-        id: "student",
-        title: "Student Budget",
-        description: "Optimized for minimal income and high education costs.",
-        breakdown: [
-            { category: "Food & Fun", percent: 60, color: "bg-orange-500" },
-            { category: "Education", percent: 20, color: "bg-blue-500" },
-            { category: "Other", percent: 20, color: "bg-slate-500" }
-        ],
-        icon: <PlusCircle className="w-5 h-5 text-orange-500" />
-    },
-    {
-        id: "minimalist",
-        title: "Minimalist Saver",
-        description: "Aggressive saving strategy for fire (financial independence).",
-        breakdown: [
-            { category: "Housing & Bills", percent: 30, color: "bg-indigo-500" },
-            { category: "Food", percent: 20, color: "bg-orange-500" },
-            { category: "Savings", percent: 50, color: "bg-emerald-500" }
-        ],
-        icon: <Sparkles className="w-5 h-5 text-emerald-500" />
-    }
-];
-
-export default function BudgetPlans() {
+export default function BudgetPlans({ t }) {
+    const BUDGET_PLANS = [
+        {
+            id: "50-30-20",
+            title: t.lang === "tr" ? "50/30/20 Kuralı" : "The 50/30/20 Rule",
+            description: t.lang === "tr" ? "İstikrarlı finansal büyüme için dengeli dağılım." : "Balanced allocation for stable financial growth.",
+            breakdown: [
+                { category: t.categories.housing, percent: 50, color: "bg-indigo-500" },
+                { category: t.categories.food, percent: 30, color: "bg-orange-500" },
+                { category: t.categories.other, percent: 20, color: "bg-emerald-500" }
+            ],
+            icon: <Target className="w-5 h-5 text-indigo-500" />
+        },
+        {
+            id: "student",
+            title: t.lang === "tr" ? "Öğrenci Bütçesi" : "Student Budget",
+            description: t.lang === "tr" ? "Düşük gelir ve eğitim giderleri için optimize edildi." : "Optimized for minimal income and high education costs.",
+            breakdown: [
+                { category: t.categories.food, percent: 60, color: "bg-orange-500" },
+                { category: t.lang === "tr" ? "Eğitim" : "Education", percent: 20, color: "bg-blue-500" },
+                { category: t.categories.other, percent: 20, color: "bg-slate-500" }
+            ],
+            icon: <PlusCircle className="w-5 h-5 text-orange-500" />
+        },
+        {
+            id: "minimalist",
+            title: t.lang === "tr" ? "Minimalist Birikim" : "Minimalist Saver",
+            description: t.lang === "tr" ? "Finansal özgürlük için agresif birikim stratejisi." : "Aggressive saving strategy for fire (financial independence).",
+            breakdown: [
+                { category: t.categories.housing, percent: 30, color: "bg-indigo-500" },
+                { category: t.categories.food, percent: 20, color: "bg-orange-500" },
+                { category: t.categories.other, percent: 50, color: "bg-emerald-500" }
+            ],
+            icon: <Sparkles className="w-5 h-5 text-emerald-500" />
+        }
+    ];
     return (
         <div className="glass rounded-2xl p-6 md:p-8 w-full mt-8">
             <div className="flex items-center gap-3 mb-6">
@@ -46,8 +45,8 @@ export default function BudgetPlans() {
                     <PieChart className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                    <h2 className="text-2xl font-bold text-foreground">Spending Plans</h2>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Recommended Allocations</p>
+                    <h2 className="text-2xl font-bold text-foreground">{t.spendingPlans}</h2>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">{t.recommendedAllocations}</p>
                 </div>
             </div>
 
@@ -83,7 +82,7 @@ export default function BudgetPlans() {
                         </div>
 
                         <button className="mt-5 w-full py-2 rounded-lg bg-muted text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-all duration-200">
-                            Apply this logic
+                            {t.applyLogic}
                         </button>
                     </div>
                 ))}

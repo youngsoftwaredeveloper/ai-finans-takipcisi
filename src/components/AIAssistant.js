@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Bot, Sparkles, Coffee, DollarSign, TrendingDown, MessageSquare } from "lucide-react";
 
-export default function AIAssistant({ expenses, exchangeRate = 31.00 }) {
+export default function AIAssistant({ expenses, exchangeRate = 31.00, t }) {
     const [advice, setAdvice] = useState([]);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
 
@@ -36,9 +36,9 @@ export default function AIAssistant({ expenses, exchangeRate = 31.00 }) {
             insights.push({
                 type: "habit",
                 icon: <Coffee className="w-5 h-5 text-amber-600" />,
-                title: "Coffee Habit Analysis",
-                message: `You've made ${coffeeCount} coffee/drink expenses this month (Total: ₺${coffeeTotal.toFixed(2)}). It looks like you're drinking too much coffee out.`,
-                tip: `☕ If you start brewing at home, you could save about ₺${(coffeeTotal * 0.8).toFixed(2)} (20%) this month!`,
+                title: t.aiHabitTitle,
+                message: t.aiHabitMsg(coffeeCount, coffeeTotal.toFixed(2)),
+                tip: t.aiHabitTip((coffeeTotal * 0.8).toFixed(2)),
                 color: "bg-amber-500/10 border-amber-500/20 text-amber-700"
             });
         }
@@ -49,9 +49,9 @@ export default function AIAssistant({ expenses, exchangeRate = 31.00 }) {
             insights.push({
                 type: "saving",
                 icon: <DollarSign className="w-5 h-5 text-emerald-600" />,
-                title: "General Savings Potential",
-                message: `I've analyzed your expenses. You can save an additional ₺${potentialSavings.toFixed(2)} this month by cutting some flexible spending.`,
-                tip: "💡 I can optimize your spending by 15% by setting weekly budget limits.",
+                title: t.aiSavingsTitle,
+                message: t.aiSavingsMsg(potentialSavings.toFixed(2)),
+                tip: t.aiSavingsTip,
                 color: "bg-emerald-500/10 border-emerald-500/20 text-emerald-700"
             });
         }
@@ -75,9 +75,9 @@ export default function AIAssistant({ expenses, exchangeRate = 31.00 }) {
             insights.push({
                 type: "warning",
                 icon: <TrendingDown className="w-5 h-5 text-blue-600" />,
-                title: "Category Balance",
-                message: `${mainCategory} expenses account for more than 40% of your total budget!`,
-                tip: "📊 You should review this item to make room for other categories.",
+                title: t.aiWarningTitle,
+                message: t.aiWarningMsg(t.categories[mainCategory.toLowerCase()] || mainCategory),
+                tip: t.aiWarningTip,
                 color: "bg-blue-500/10 border-blue-500/20 text-blue-700"
             });
         }
@@ -95,8 +95,8 @@ export default function AIAssistant({ expenses, exchangeRate = 31.00 }) {
                         <Bot className="w-6 h-6 text-primary" />
                     </div>
                     <div>
-                        <h3 className="font-bold text-foreground">AI Finance Assistant</h3>
-                        <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold">Active Analysis</p>
+                        <h3 className="font-bold text-foreground">{t.aiAssistant}</h3>
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold">{t.activeAnalysis}</p>
                     </div>
                 </div>
                 {isAnalyzing && (
@@ -113,7 +113,7 @@ export default function AIAssistant({ expenses, exchangeRate = 31.00 }) {
                     <div className="text-center py-4">
                         <MessageSquare className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
                         <p className="text-sm text-muted-foreground italic">
-                            Waiting for expense data. I haven't found anything to analyze yet...
+                            {t.waitingData}
                         </p>
                     </div>
                 ) : (
@@ -138,7 +138,7 @@ export default function AIAssistant({ expenses, exchangeRate = 31.00 }) {
 
             <div className="mt-6 pt-4 border-t border-border/50 text-center">
                 <button className="text-xs text-primary hover:underline font-medium">
-                    Show more detailed analysis →
+                    {t.showMore}
                 </button>
             </div>
         </div>

@@ -10,15 +10,15 @@ const categoryColors = {
     "Other": "bg-slate-500/10 text-slate-500 border-slate-500/20",
 };
 
-export default function ExpenseList({ expenses, onDelete, exchangeRate }) {
+export default function ExpenseList({ expenses, onDelete, exchangeRate, t }) {
     if (expenses.length === 0) {
         return (
             <div className="glass rounded-2xl p-8 text-center w-full">
                 <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg className="w-8 h-8 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 12H4"></path></svg>
                 </div>
-                <h3 className="text-lg font-medium text-foreground mb-1">No expenses yet</h3>
-                <p className="text-muted-foreground text-sm">Add your first expense from the form to get started.</p>
+                <h3 className="text-lg font-medium text-foreground mb-1">{t.noExpenses}</h3>
+                <p className="text-muted-foreground text-sm">{t.addFirstExpense}</p>
             </div>
         );
     }
@@ -38,7 +38,7 @@ export default function ExpenseList({ expenses, onDelete, exchangeRate }) {
                             <h4 className="font-semibold text-foreground text-lg">{expense.description}</h4>
                             <div className="flex items-center gap-2 mt-1">
                                 <span className={`text-xs px-2 py-0.5 rounded-md border ${categoryColors[expense.category] || categoryColors["Other"]}`}>
-                                    {expense.category}
+                                    {t.categories[expense.category.toLowerCase()] || expense.category}
                                 </span>
                                 <span className="text-xs text-muted-foreground">{expense.date}</span>
                             </div>

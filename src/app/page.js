@@ -10,13 +10,16 @@ import { supabase } from "@/lib/supabase";
 import { getExchangeRate } from "@/lib/currency";
 import BudgetPlanner from "@/components/BudgetPlanner";
 import BudgetPlans from "@/components/BudgetPlans";
-import { LogOut } from "lucide-react";
+import { translations } from "@/lib/translations";
+import { LogOut, Globe } from "lucide-react";
 
 export default function Home() {
   const [expenses, setExpenses] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [user, setUser] = useState(null);
   const [exchangeRate, setExchangeRate] = useState(31.00);
+  const [lang, setLang] = useState("en");
+  const t = translations[lang];
 
   useEffect(() => {
     // Check active session on load
@@ -102,7 +105,7 @@ export default function Home() {
       }
     } catch (error) {
       console.error('Error adding expense:', error.message);
-      alert("An error occurred while adding the expense.");
+      alert(t.errorAdding || "An error occurred while adding the expense.");
     }
   };
 
@@ -121,7 +124,7 @@ export default function Home() {
       setExpenses(expenses.filter(expense => expense.id !== id));
     } catch (error) {
       console.error('Error deleting expense:', error.message);
-      alert("An error occurred while deleting the expense.");
+      alert(t.errorDeleting || "An error occurred while deleting the expense.");
     }
   };
 
@@ -135,7 +138,7 @@ export default function Home() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-background">
         <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
-        <p className="text-muted-foreground animate-pulse">Loading your financial data...</p>
+        <p className="text-muted-foreground animate-pulse">{t.loading}</p>
       </div>
     );
   }
@@ -144,7 +147,7 @@ export default function Home() {
   if (!user) {
     return <Auth onLogin={(user) => {
       setUser(user);
-    }} />;
+    }} lang={lang} setLang={setLang} />;
   }
 
   // Main Dashboard for logged in users
@@ -155,25 +158,33 @@ export default function Home() {
         <div className="text-center md:text-left">
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-2">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-              AI Finance Tracker
+              {t.title}
             </span>
           </h1>
           <p className="text-muted-foreground text-md max-w-xl">
-            Take control of your finances with smart, elegant, and modern tracking.
+            {t.subtitle}
           </p>
         </div>
 
-        {/* User Profile / Logout */}
-        <div className="flex items-center gap-4 bg-glass px-5 py-3 rounded-2xl border border-border/50">
+        {/* User Profile / Language / Logout */}
+        <div className="flex flex-wrap items-center gap-4 bg-glass px-5 py-3 rounded-2xl border border-border/50">
+          <button
+            onClick={() => setLang(lang === "en" ? "tr" : "en")}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-muted/50 hover:bg-muted text-xs font-bold transition-all border border-border/50"
+          >
+            <Globe className="w-4 h-4 text-primary" />
+            {lang.toUpperCase()}
+          </button>
+          <div className="h-4 w-px bg-border hidden sm:block"></div>
           <div className="flex flex-col text-right">
             <span className="text-sm font-medium text-foreground">{user.email}</span>
-            <span className="text-xs text-muted-foreground">Active Session</span>
+            <span className="text-xs text-muted-foreground">{t.activeSession}</span>
           </div>
           <div className="h-8 w-px bg-border"></div>
           <button
             onClick={handleLogout}
             className="p-2 text-muted-foreground hover:text-danger hover:bg-danger/10 rounded-xl transition-all"
-            title="Logout"
+            title={t.logout}
           >
             <LogOut className="w-5 h-5" />
           </button>
@@ -186,41 +197,41 @@ export default function Home() {
           {/* Total Summary Card */}
           <div className="glass rounded-2xl p-8 relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-700"></div>
-            <h3 className="text-muted-foreground font-medium mb-2 relative z-10">Total Expenses</h3>
+            <h3 className="text-muted-foreground font-medium mb-2 relative z-10">{t.totalExpenses}</h3>
             <div className="flex flex-col gap-1 relative z-10">
               <p className="text-4xl font-bold text-foreground">₺{totalExpense.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</p>
               <p className="text-xl font-medium text-muted-foreground opacity-80">${(totalExpense / exchangeRate).toFixed(2)}</p>
             </div>
             <div className="mt-4 text-[10px] text-muted-foreground/50 border-t border-border/20 pt-2">
-              Exchange Rate: 1 USD = {exchangeRate.toFixed(2)} TRY
+              {t.exchangeRate}: 1 USD = {exchangeRate.toFixed(2)} TRY
             </div>
           </div>
 
-          <ExpenseForm onAddExpense={handleAddExpense} />
+          <ExpenseForm onAddExpense={handleAddExpense} t={t} />
 
-          <AIAssistant expenses={expenses} exchangeRate={exchangeRate} />
+          <AIAssistant expenses={expenses} exchangeRate={exchangeRate} t={t} />
         </div>
 
         {/* Right Column: Chart & List */}
         <div className="lg:col-span-8 flex flex-col gap-8">
-          <BudgetPlanner expenses={expenses} totalExpense={totalExpense} exchangeRate={exchangeRate} />
+          <BudgetPlanner expenses={expenses} totalExpense={totalExpense} exchangeRate={exchangeRate} t={t} />
 
           <div className="w-full h-auto min-h-[400px]">
-            <ExpenseChart expenses={expenses} exchangeRate={exchangeRate} />
+            <ExpenseChart expenses={expenses} exchangeRate={exchangeRate} t={t} />
           </div>
 
           <div className="glass rounded-2xl p-6 md:p-8">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-semibold text-foreground">Recent Expenses</h2>
+              <h2 className="text-2xl font-semibold text-foreground">{t.recentExpenses}</h2>
               <span className="text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full">
-                {expenses.length} transactions
+                {expenses.length} {t.transactions}
               </span>
             </div>
 
-            <ExpenseList expenses={expenses} onDelete={handleDeleteExpense} exchangeRate={exchangeRate} />
+            <ExpenseList expenses={expenses} onDelete={handleDeleteExpense} exchangeRate={exchangeRate} t={t} />
           </div>
 
-          <BudgetPlans />
+          <BudgetPlans t={t} />
         </div>
       </div>
     </div>

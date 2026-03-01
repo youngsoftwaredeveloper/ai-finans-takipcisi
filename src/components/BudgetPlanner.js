@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Wallet, Info, BrainCircuit, CheckCircle2, AlertTriangle } from "lucide-react";
 
-export default function BudgetPlanner({ totalExpense, expenses, exchangeRate }) {
+export default function BudgetPlanner({ totalExpense, expenses, exchangeRate, t }) {
     const [monthlyBudget, setMonthlyBudget] = useState(15000);
     const [isEditing, setIsEditing] = useState(false);
     const [tempBudget, setTempBudget] = useState(15000);
@@ -22,9 +22,9 @@ export default function BudgetPlanner({ totalExpense, expenses, exchangeRate }) 
     const getAiAllocation = () => {
         // Simple but smart allocation logic
         return [
-            { name: "Fixed Needs", amount: monthlyBudget * 0.5, desc: "Housing, Bills & Essentials" },
-            { name: "Variable Wants", amount: monthlyBudget * 0.3, desc: "Dining, Entertainment & Hobbies" },
-            { name: "Savings/Debt", amount: monthlyBudget * 0.2, desc: "Future growth & Security" }
+            { name: t.fixedNeeds, amount: monthlyBudget * 0.5, desc: t.fixedNeedsDesc },
+            { name: t.variableWants, amount: monthlyBudget * 0.3, desc: t.variableWantsDesc },
+            { name: t.savingsDebt, amount: monthlyBudget * 0.2, desc: t.savingsDebtDesc }
         ];
     };
 
@@ -41,16 +41,16 @@ export default function BudgetPlanner({ totalExpense, expenses, exchangeRate }) 
                         <BrainCircuit className="w-7 h-7 text-primary-foreground" />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold text-foreground">AI Budget Planner</h2>
+                        <h2 className="text-2xl font-bold text-foreground">{t.budgetPlanner}</h2>
                         <p className="text-xs text-muted-foreground uppercase tracking-widest font-semibold flex items-center gap-1">
-                            Smart Management Active <SparkleIcon />
+                            {t.smartManagement} <SparkleIcon />
                         </p>
                     </div>
                 </div>
 
                 <div className="flex items-center gap-3 bg-background/40 backdrop-blur-md p-2 rounded-2xl border border-border/50">
                     <div className="px-4 py-2">
-                        <span className="text-[10px] text-muted-foreground block uppercase font-bold">Planned Budget</span>
+                        <span className="text-[10px] text-muted-foreground block uppercase font-bold">{t.plannedBudget}</span>
                         {isEditing ? (
                             <div className="flex items-center gap-2 mt-1">
                                 <input
@@ -59,7 +59,7 @@ export default function BudgetPlanner({ totalExpense, expenses, exchangeRate }) 
                                     onChange={(e) => setTempBudget(e.target.value)}
                                     className="w-24 bg-background border border-primary/30 rounded-lg px-2 py-1 text-sm font-bold text-foreground focus:outline-none"
                                 />
-                                <button onClick={handleSave} className="bg-primary text-primary-foreground p-1 rounded-lg text-xs">Save</button>
+                                <button onClick={handleSave} className="bg-primary text-primary-foreground p-1 rounded-lg text-xs">{t.save}</button>
                             </div>
                         ) : (
                             <div className="flex items-center gap-2 cursor-pointer" onClick={() => setIsEditing(true)}>
@@ -78,12 +78,12 @@ export default function BudgetPlanner({ totalExpense, expenses, exchangeRate }) 
                         <div className="flex mb-2 items-center justify-between">
                             <div>
                                 <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-primary bg-primary/10">
-                                    Budget Usage
+                                    {t.budgetUsage}
                                 </span>
                             </div>
                             <div className="text-right">
                                 <span className="text-xs font-bold inline-block text-foreground">
-                                    {Math.round(spentPercentage)}% Used
+                                    {Math.round(spentPercentage)}% {t.used}
                                 </span>
                             </div>
                         </div>
@@ -100,11 +100,11 @@ export default function BudgetPlanner({ totalExpense, expenses, exchangeRate }) 
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className={`p-4 rounded-2xl border ${isOverBudget ? 'bg-danger/10 border-danger/20' : 'bg-background/40 border-border/50'}`}>
-                            <span className="text-[10px] uppercase font-bold text-muted-foreground block mb-1">Spent So Far</span>
+                            <span className="text-[10px] uppercase font-bold text-muted-foreground block mb-1">{t.spentSoFar}</span>
                             <span className={`text-xl font-bold ${isOverBudget ? 'text-danger' : 'text-foreground'}`}>₺{totalExpense.toLocaleString()}</span>
                         </div>
                         <div className={`p-4 rounded-2xl border ${isOverBudget ? 'bg-danger/10 border-danger/20' : 'bg-background/40 border-border/50'}`}>
-                            <span className="text-[10px] uppercase font-bold text-muted-foreground block mb-1">Remaining</span>
+                            <span className="text-[10px] uppercase font-bold text-muted-foreground block mb-1">{t.remaining}</span>
                             <span className={`text-xl font-bold ${isOverBudget ? 'text-danger' : 'text-emerald-500'}`}>
                                 {isOverBudget ? '-' : ''}₺{Math.abs(remainingBudget).toLocaleString()}
                             </span>
@@ -116,7 +116,7 @@ export default function BudgetPlanner({ totalExpense, expenses, exchangeRate }) 
                 <div className="bg-glass/30 rounded-2xl p-6 border border-border/30 space-y-4">
                     <h3 className="font-bold text-sm text-foreground flex items-center gap-2">
                         <BrainCircuit className="w-4 h-4 text-primary" />
-                        AI Recommended Allocation
+                        {t.aiRecommended}
                     </h3>
 
                     <div className="space-y-3">
@@ -128,7 +128,7 @@ export default function BudgetPlanner({ totalExpense, expenses, exchangeRate }) 
                                 </div>
                                 <div className="text-right">
                                     <span className="text-xs font-bold text-foreground block">₺{item.amount.toLocaleString()}</span>
-                                    <span className="text-[10px] text-muted-foreground uppercase font-semibold">Targets</span>
+                                    <span className="text-[10px] text-muted-foreground uppercase font-semibold">{t.targets}</span>
                                 </div>
                             </div>
                         ))}
@@ -136,7 +136,7 @@ export default function BudgetPlanner({ totalExpense, expenses, exchangeRate }) 
 
                     <div className="mt-4 p-3 rounded-xl bg-primary/5 border border-primary/10">
                         <p className="text-[11px] text-muted-foreground italic leading-relaxed">
-                            "I've calculated these targets based on your monthly income goals. Sticking to these will help you save ₺{(monthlyBudget * 0.2).toLocaleString()} this month."
+                            "{t.aiQuote.replace("20%", `₺${(monthlyBudget * 0.2).toLocaleString()}`)}"
                         </p>
                     </div>
                 </div>
@@ -146,8 +146,8 @@ export default function BudgetPlanner({ totalExpense, expenses, exchangeRate }) 
                 <div className="mt-8 flex items-center gap-3 p-4 bg-danger/10 border border-danger/20 rounded-2xl animate-bounce-subtle">
                     <AlertTriangle className="w-6 h-6 text-danger" />
                     <div>
-                        <h4 className="text-sm font-bold text-danger">Budget Limit Exceeded!</h4>
-                        <p className="text-xs text-danger/80 italic">Stop all unnecessary spending immediately to regain financial balance.</p>
+                        <h4 className="text-sm font-bold text-danger">{t.budgetExceeded}</h4>
+                        <p className="text-xs text-danger/80 italic">{t.stopSpending}</p>
                     </div>
                 </div>
             )}

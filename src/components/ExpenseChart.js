@@ -12,11 +12,13 @@ const COLORS = {
     "Other": "#64748b", // slate-500
 };
 
-const CustomTooltip = ({ active, payload, exchangeRate }) => {
+const CustomTooltip = ({ active, payload, exchangeRate, t }) => {
     if (active && payload && payload.length) {
         return (
             <div className="bg-card/90 backdrop-blur-md border border-border p-3 rounded-xl shadow-xl">
-                <p className="font-medium text-foreground">{payload[0].name}</p>
+                <p className="font-medium text-foreground">
+                    {t.categories[payload[0].name.toLowerCase()] || payload[0].name}
+                </p>
                 <div className="flex flex-col">
                     <p className="text-primary font-bold">₺{payload[0].value.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</p>
                     {exchangeRate && (
@@ -31,7 +33,7 @@ const CustomTooltip = ({ active, payload, exchangeRate }) => {
     return null;
 };
 
-export default function ExpenseChart({ expenses, exchangeRate }) {
+export default function ExpenseChart({ expenses, exchangeRate, t }) {
     // Aggregate data by category
     const aggregatedData = expenses.reduce((acc, current) => {
         const existing = acc.find((item) => item.name === current.category);
@@ -54,8 +56,8 @@ export default function ExpenseChart({ expenses, exchangeRate }) {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
                     </svg>
                 </div>
-                <h3 className="text-lg font-medium text-foreground mb-1">No data to display</h3>
-                <p className="text-muted-foreground text-sm">Add expenses to generate spending charts.</p>
+                <h3 className="text-lg font-medium text-foreground mb-1">{t.lang === "tr" ? "Görüntülenecek veri yok" : "No data to display"}</h3>
+                <p className="text-muted-foreground text-sm">{t.lang === "tr" ? "Harcama grafikleri oluşturmak için harcama ekleyin." : "Add expenses to generate spending charts."}</p>
             </div>
         );
     }
@@ -65,9 +67,9 @@ export default function ExpenseChart({ expenses, exchangeRate }) {
             <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-primary/5 to-transparent pointer-events-none"></div>
 
             <h3 className="text-xl font-semibold mb-6 text-foreground relative z-10 flex items-center justify-between">
-                Spending by Category
+                {t.lang === "tr" ? "Kategori Bazlı Harcama" : "Spending by Category"}
                 <span className="text-xs font-normal text-muted-foreground bg-muted px-2 py-1 rounded-md">
-                    {expenses.length} records
+                    {expenses.length} {t.lang === "tr" ? "kayıt" : "records"}
                 </span>
             </h3>
 
@@ -92,13 +94,15 @@ export default function ExpenseChart({ expenses, exchangeRate }) {
                                 />
                             ))}
                         </Pie>
-                        <Tooltip content={<CustomTooltip exchangeRate={exchangeRate} />} />
+                        <Tooltip content={<CustomTooltip exchangeRate={exchangeRate} t={t} />} />
                         <Legend
                             verticalAlign="bottom"
                             height={36}
                             iconType="circle"
                             formatter={(value, entry) => (
-                                <span className="text-sm font-medium text-foreground ml-1">{value}</span>
+                                <span className="text-sm font-medium text-foreground ml-1">
+                                    {t.categories[value.toLowerCase()] || value}
+                                </span>
                             )}
                         />
                     </PieChart>

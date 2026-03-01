@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function ExpenseForm({ onAddExpense }) {
+export default function ExpenseForm({ onAddExpense, t }) {
     const [amount, setAmount] = useState("");
     const [category, setCategory] = useState("Food");
     const [description, setDescription] = useState("");
@@ -28,11 +28,11 @@ export default function ExpenseForm({ onAddExpense }) {
         <div className="glass rounded-2xl p-6 md:p-8 w-full mx-auto relative overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10 opacity-50 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 
-            <h2 className="text-2xl font-semibold mb-6 text-foreground relative z-10">Add Expense</h2>
+            <h2 className="text-2xl font-semibold mb-6 text-foreground relative z-10">{t.addExpense}</h2>
 
             <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
                 <div>
-                    <label className="block text-sm font-medium text-muted-foreground mb-1.5">Amount (TRY)</label>
+                    <label className="block text-sm font-medium text-muted-foreground mb-1.5">{t.amount}</label>
                     <input
                         type="number"
                         value={amount}
@@ -44,35 +44,35 @@ export default function ExpenseForm({ onAddExpense }) {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-muted-foreground mb-1.5">Category</label>
+                    <label className="block text-sm font-medium text-muted-foreground mb-1.5">{t.category}</label>
                     <select
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
                         className="w-full bg-background/50 border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary cursor-pointer transition-all duration-200"
                     >
-                        <option value="Food">Food & Groceries</option>
-                        <option value="Transportation">Transportation</option>
-                        <option value="Entertainment">Entertainment</option>
-                        <option value="Shopping">Shopping</option>
-                        <option value="Housing">Housing & Bills</option>
-                        <option value="Utilities">Subscriptions</option>
-                        <option value="Other">Other</option>
+                        <option value="Food">{t.categories.food}</option>
+                        <option value="Transportation">{t.categories.transportation}</option>
+                        <option value="Entertainment">{t.categories.entertainment}</option>
+                        <option value="Shopping">{t.categories.shopping}</option>
+                        <option value="Housing">{t.categories.housing}</option>
+                        <option value="Utilities">{t.categories.utilities}</option>
+                        <option value="Other">{t.categories.other}</option>
                     </select>
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-muted-foreground mb-1.5">Description</label>
+                    <label className="block text-sm font-medium text-muted-foreground mb-1.5">{t.description}</label>
                     <input
                         type="text"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        placeholder="What did you spend it on?"
+                        placeholder={t.placeholderDesc}
                         className="w-full bg-background/50 border border-border rounded-xl px-4 py-3 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200"
                     />
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-muted-foreground mb-1.5">Date</label>
+                    <label className="block text-sm font-medium text-muted-foreground mb-1.5">{t.date}</label>
                     <input
                         type="date"
                         value={date}
@@ -85,7 +85,7 @@ export default function ExpenseForm({ onAddExpense }) {
                     type="submit"
                     className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-3 px-4 rounded-xl shadow-lg shadow-primary/25 hover:shadow-primary/40 transform hover:-translate-y-0.5 transition-all duration-200 active:translate-y-0"
                 >
-                    Add Expense
+                    {t.addExpense}
                 </button>
             </form>
         </div>

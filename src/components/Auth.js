@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { LogIn, UserPlus } from "lucide-react";
+import { translations } from "@/lib/translations";
+import { LogIn, UserPlus, Globe } from "lucide-react";
 
-export default function Auth({ onLogin }) {
+export default function Auth({ onLogin, lang, setLang }) {
+    const t = translations[lang];
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLogin, setIsLogin] = useState(true);
@@ -35,7 +37,7 @@ export default function Auth({ onLogin }) {
                     onLogin(data.user);
                 } else {
                     // If email confirmation is required by Supabase settings
-                    setError("Registration successful! Please click the verification link sent to your email.");
+                    setError(t.regSuccess);
                 }
             }
         } catch (err) {
@@ -51,14 +53,24 @@ export default function Auth({ onLogin }) {
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-accent/20 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none"></div>
 
+                <div className="flex justify-start mb-4 relative z-10">
+                    <button
+                        onClick={() => setLang(lang === "en" ? "tr" : "en")}
+                        className="flex items-center gap-2 px-3 py-1 rounded-xl bg-muted/50 hover:bg-muted text-[10px] font-bold transition-all border border-border/50"
+                    >
+                        <Globe className="w-3 h-3 text-primary" />
+                        {lang.toUpperCase()}
+                    </button>
+                </div>
+
                 <div className="text-center mb-8 relative z-10">
                     <h1 className="text-3xl font-extrabold tracking-tight mb-2">
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-                            AI Finance Tracker
+                            {t.title}
                         </span>
                     </h1>
                     <p className="text-muted-foreground text-sm">
-                        {isLogin ? "Sign in to your account" : "Create a new account"}
+                        {isLogin ? t.signinToAccount : t.createNewAccount}
                     </p>
                 </div>
 
@@ -71,7 +83,7 @@ export default function Auth({ onLogin }) {
                 <form onSubmit={handleAuth} className="space-y-5 relative z-10">
                     <div>
                         <label className="block text-sm font-medium text-muted-foreground mb-1.5">
-                            Email Address
+                            {t.emailAddress}
                         </label>
                         <input
                             type="email"
@@ -85,7 +97,7 @@ export default function Auth({ onLogin }) {
 
                     <div>
                         <label className="block text-sm font-medium text-muted-foreground mb-1.5">
-                            Password
+                            {t.password}
                         </label>
                         <input
                             type="password"
@@ -107,13 +119,12 @@ export default function Auth({ onLogin }) {
                             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                         ) : isLogin ? (
                             <>
-                                <LogIn className="w-5 h-5" />
-                                Login
+                                {t.login}
                             </>
                         ) : (
                             <>
                                 <UserPlus className="w-5 h-5" />
-                                Signup
+                                {t.signup}
                             </>
                         )}
                     </button>
@@ -128,8 +139,8 @@ export default function Auth({ onLogin }) {
                         className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors outline-none"
                     >
                         {isLogin
-                            ? "Don't have an account? Sign up"
-                            : "Already have an account? Sign in"}
+                            ? t.noAccount
+                            : t.haveAccount}
                     </button>
                 </div>
             </div>
