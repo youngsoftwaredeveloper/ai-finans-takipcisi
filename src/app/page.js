@@ -8,6 +8,7 @@ import AIAssistant from "@/components/AIAssistant";
 import Auth from "@/components/Auth";
 import { supabase } from "@/lib/supabase";
 import { getExchangeRate } from "@/lib/currency";
+import BudgetPlanner from "@/components/BudgetPlanner";
 import BudgetPlans from "@/components/BudgetPlans";
 import { LogOut } from "lucide-react";
 
@@ -202,6 +203,8 @@ export default function Home() {
 
         {/* Right Column: Chart & List */}
         <div className="lg:col-span-8 flex flex-col gap-8">
+          <BudgetPlanner expenses={expenses} totalExpense={totalExpense} exchangeRate={exchangeRate} />
+
           <div className="w-full h-auto min-h-[400px]">
             <ExpenseChart expenses={expenses} exchangeRate={exchangeRate} />
           </div>
