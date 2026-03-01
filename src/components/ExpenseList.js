@@ -17,8 +17,8 @@ export default function ExpenseList({ expenses, onDelete, exchangeRate }) {
                 <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg className="w-8 h-8 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 12H4"></path></svg>
                 </div>
-                <h3 className="text-lg font-medium text-foreground mb-1">Henüz harcama yok</h3>
-                <p className="text-muted-foreground text-sm">Başlamak için formdan ilk harcamanızı ekleyin.</p>
+                <h3 className="text-lg font-medium text-foreground mb-1">No expenses yet</h3>
+                <p className="text-muted-foreground text-sm">Add your first expense from the form to get started.</p>
             </div>
         );
     }

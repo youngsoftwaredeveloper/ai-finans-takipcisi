@@ -100,7 +100,7 @@ export default function Home() {
       }
     } catch (error) {
       console.error('Error adding expense:', error.message);
-      alert("Harcama eklenirken bir hata oluştu.");
+      alert("An error occurred while adding the expense.");
     }
   };
 
@@ -119,7 +119,7 @@ export default function Home() {
       setExpenses(expenses.filter(expense => expense.id !== id));
     } catch (error) {
       console.error('Error deleting expense:', error.message);
-      alert("Harcama silinirken bir hata oluştu.");
+      alert("An error occurred while deleting the expense.");
     }
   };
 
@@ -133,7 +133,7 @@ export default function Home() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-background">
         <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
-        <p className="text-muted-foreground animate-pulse">Finans verileriniz yükleniyor...</p>
+        <p className="text-muted-foreground animate-pulse">Loading your financial data...</p>
       </div>
     );
   }
@@ -165,13 +165,13 @@ export default function Home() {
         <div className="flex items-center gap-4 bg-glass px-5 py-3 rounded-2xl border border-border/50">
           <div className="flex flex-col text-right">
             <span className="text-sm font-medium text-foreground">{user.email}</span>
-            <span className="text-xs text-muted-foreground">Aktif Oturum</span>
+            <span className="text-xs text-muted-foreground">Active Session</span>
           </div>
           <div className="h-8 w-px bg-border"></div>
           <button
             onClick={handleLogout}
             className="p-2 text-muted-foreground hover:text-danger hover:bg-danger/10 rounded-xl transition-all"
-            title="Çıkış Yap"
+            title="Logout"
           >
             <LogOut className="w-5 h-5" />
           </button>
@@ -184,13 +184,13 @@ export default function Home() {
           {/* Total Summary Card */}
           <div className="glass rounded-2xl p-8 relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-700"></div>
-            <h3 className="text-muted-foreground font-medium mb-2 relative z-10">Toplam Harcama</h3>
+            <h3 className="text-muted-foreground font-medium mb-2 relative z-10">Total Expenses</h3>
             <div className="flex flex-col gap-1 relative z-10">
               <p className="text-4xl font-bold text-foreground">₺{totalExpense.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</p>
               <p className="text-xl font-medium text-muted-foreground opacity-80">${(totalExpense / exchangeRate).toFixed(2)}</p>
             </div>
             <div className="mt-4 text-[10px] text-muted-foreground/50 border-t border-border/20 pt-2">
-              Güncel Kur: 1 USD = {exchangeRate.toFixed(2)} TRY
+              Exchange Rate: 1 USD = {exchangeRate.toFixed(2)} TRY
             </div>
           </div>
 

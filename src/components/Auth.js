@@ -35,7 +35,7 @@ export default function Auth({ onLogin }) {
                     onLogin(data.user);
                 } else {
                     // If email confirmation is required by Supabase settings
-                    setError("Kayıt başarılı! Lütfen e-posta adresinize gelen doğrulama linkine tıklayın.");
+                    setError("Registration successful! Please click the verification link sent to your email.");
                 }
             }
         } catch (err) {
@@ -58,7 +58,7 @@ export default function Auth({ onLogin }) {
                         </span>
                     </h1>
                     <p className="text-muted-foreground text-sm">
-                        {isLogin ? "Hesabınıza giriş yapın" : "Yeni bir hesap oluşturun"}
+                        {isLogin ? "Sign in to your account" : "Create a new account"}
                     </p>
                 </div>
 
@@ -71,13 +71,13 @@ export default function Auth({ onLogin }) {
                 <form onSubmit={handleAuth} className="space-y-5 relative z-10">
                     <div>
                         <label className="block text-sm font-medium text-muted-foreground mb-1.5">
-                            E-posta Adresi
+                            Email Address
                         </label>
                         <input
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="ornek@email.com"
+                            placeholder="example@email.com"
                             required
                             className="w-full bg-background/50 border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200"
                         />
@@ -85,7 +85,7 @@ export default function Auth({ onLogin }) {
 
                     <div>
                         <label className="block text-sm font-medium text-muted-foreground mb-1.5">
-                            Parola
+                            Password
                         </label>
                         <input
                             type="password"
@@ -108,12 +108,12 @@ export default function Auth({ onLogin }) {
                         ) : isLogin ? (
                             <>
                                 <LogIn className="w-5 h-5" />
-                                Giriş Yap
+                                Login
                             </>
                         ) : (
                             <>
                                 <UserPlus className="w-5 h-5" />
-                                Kayıt Ol
+                                Signup
                             </>
                         )}
                     </button>
@@ -128,8 +128,8 @@ export default function Auth({ onLogin }) {
                         className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors outline-none"
                     >
                         {isLogin
-                            ? "Hesabınız yok mu? Kayıt Olun"
-                            : "Zaten hesabınız var mı? Giriş Yapın"}
+                            ? "Don't have an account? Sign up"
+                            : "Already have an account? Sign in"}
                     </button>
                 </div>
             </div>
