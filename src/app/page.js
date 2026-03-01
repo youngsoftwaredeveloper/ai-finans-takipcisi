@@ -8,6 +8,7 @@ import AIAssistant from "@/components/AIAssistant";
 import Auth from "@/components/Auth";
 import { supabase } from "@/lib/supabase";
 import { getExchangeRate } from "@/lib/currency";
+import BudgetPlans from "@/components/BudgetPlans";
 import { LogOut } from "lucide-react";
 
 export default function Home() {
@@ -215,6 +216,8 @@ export default function Home() {
 
             <ExpenseList expenses={expenses} onDelete={handleDeleteExpense} exchangeRate={exchangeRate} />
           </div>
+
+          <BudgetPlans />
         </div>
       </div>
     </div>
