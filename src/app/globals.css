@@ -36,22 +36,21 @@
     --danger: #ef4444;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --background: #0f172a;
-      --foreground: #f8fafc;
-      --card: rgba(30, 41, 59, 0.4);
-      --card-foreground: #f8fafc;
-      --primary: #3b82f6;
-      --primary-foreground: #ffffff;
-      --muted: rgba(30, 41, 59, 0.5);
-      --muted-foreground: #94a3b8;
-      --accent: #8b5cf6;
-      --accent-foreground: #ffffff;
-      --border: rgba(51, 65, 85, 0.5);
-      --success: #34d399;
-      --danger: #f87171;
-    }
+  /* Manual Dark Mode via Class */
+  .dark {
+    --background: #0f172a;
+    --foreground: #f8fafc;
+    --card: rgba(30, 41, 59, 0.45);
+    --card-foreground: #f8fafc;
+    --primary: #3b82f6;
+    --primary-foreground: #ffffff;
+    --muted: rgba(30, 41, 59, 0.6);
+    --muted-foreground: #94a3b8;
+    --accent: #8b5cf6;
+    --accent-foreground: #ffffff;
+    --border: rgba(51, 65, 85, 0.5);
+    --success: #34d399;
+    --danger: #f87171;
   }
 
   body {
@@ -59,6 +58,7 @@
     color: var(--foreground);
     min-height: 100vh;
     font-family: var(--font-sans);
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 
@@ -68,4 +68,52 @@
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+@utility animate-in {
+  animation: slide-in 0.2s ease-out;
+}
+
+@utility fade-in {
+  animation: fade-in-kf 0.3s ease-out;
+}
+
+@utility slide-in-from-bottom-full {
+  animation: slide-up-kf 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@utility slide-in-from-bottom {
+  animation: slide-up-kf 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-kf {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up-kf {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
 }

@@ -10,7 +10,9 @@ const categoryColors = {
     "Other": "bg-slate-500/10 text-slate-500 border-slate-500/20",
 };
 
-export default function ExpenseList({ expenses, onDelete, exchangeRate, t }) {
+import { X } from "lucide-react";
+
+export default function ExpenseList({ expenses, onDelete, onDeleteCategory, exchangeRate, t }) {
     if (expenses.length === 0) {
         return (
             <div className="glass rounded-2xl p-8 text-center w-full">
@@ -37,8 +39,15 @@ export default function ExpenseList({ expenses, onDelete, exchangeRate, t }) {
                         <div>
                             <h4 className="font-semibold text-foreground text-lg">{expense.description}</h4>
                             <div className="flex items-center gap-2 mt-1">
-                                <span className={`text-xs px-2 py-0.5 rounded-md border ${categoryColors[expense.category] || categoryColors["Other"]}`}>
+                                <span className={`text-[10px] px-2 py-0.5 rounded-md border ${categoryColors[expense.category] || categoryColors["Other"]} inline-flex items-center gap-1.5`}>
                                     {t.categories[expense.category.toLowerCase()] || expense.category}
+                                    <button
+                                        onClick={() => onDeleteCategory(expense.category)}
+                                        className="hover:text-danger hover:scale-125 transition-all p-1 rounded-full hover:bg-danger/10"
+                                        title={t.deleteCategory}
+                                    >
+                                        <X className="w-3 h-3" />
+                                    </button>
                                 </span>
                                 <span className="text-xs text-muted-foreground">{expense.date}</span>
                             </div>
@@ -58,7 +67,7 @@ export default function ExpenseList({ expenses, onDelete, exchangeRate, t }) {
                         </div>
                         <button
                             onClick={() => onDelete(expense.id)}
-                            className="p-2 text-muted-foreground hover:text-danger hover:bg-danger/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
+                            className="p-2 text-muted-foreground hover:text-danger hover:bg-danger/10 rounded-lg transition-colors md:opacity-0 md:group-hover:opacity-100 focus:opacity-100"
                             aria-label="Delete expense"
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>

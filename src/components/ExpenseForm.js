@@ -2,26 +2,54 @@
 
 import { useState } from "react";
 
-export default function ExpenseForm({ onAddExpense, t }) {
+export default function ExpenseForm({ onAddExpense, t, existingCategories = [] }) {
     const [amount, setAmount] = useState("");
     const [category, setCategory] = useState("Food");
+    const [isNewCategory, setIsNewCategory] = useState(false);
+    const [newCategoryName, setNewCategoryName] = useState("");
     const [description, setDescription] = useState("");
     const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
 
+    const defaultCategories = [
+        { id: "Food", name: t.categories.food },
+        { id: "Transportation", name: t.categories.transportation },
+        { id: "Entertainment", name: t.categories.entertainment },
+        { id: "Shopping", name: t.categories.shopping },
+        { id: "Housing", name: t.categories.housing },
+        { id: "Utilities", name: t.categories.utilities },
+        { id: "Other", name: t.categories.other },
+    ];
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!amount || !description) return;
+        const finalCategory = isNewCategory ? newCategoryName : category;
+        if (!amount || !description || !finalCategory) return;
 
         onAddExpense({
             id: Date.now().toString(),
             amount: parseFloat(amount),
-            category,
+            category: finalCategory,
             description,
             date,
         });
 
         setAmount("");
         setDescription("");
+        if (isNewCategory) {
+            setIsNewCategory(false);
+            setCategory(newCategoryName);
+            setNewCategoryName("");
+        }
+    };
+
+    const handleCategoryChange = (e) => {
+        if (e.target.value === "NEW") {
+            setIsNewCategory(true);
+            setNewCategoryName("");
+        } else {
+            setIsNewCategory(false);
+            setCategory(e.target.value);
+        }
     };
 
     return (
@@ -43,21 +71,34 @@ export default function ExpenseForm({ onAddExpense, t }) {
                     />
                 </div>
 
-                <div>
+                <div className="space-y-3">
                     <label className="block text-sm font-medium text-muted-foreground mb-1.5">{t.category}</label>
                     <select
-                        value={category}
-                        onChange={(e) => setCategory(e.target.value)}
+                        value={isNewCategory ? "NEW" : category}
+                        onChange={handleCategoryChange}
                         className="w-full bg-background/50 border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary cursor-pointer transition-all duration-200"
                     >
-                        <option value="Food">{t.categories.food}</option>
-                        <option value="Transportation">{t.categories.transportation}</option>
-                        <option value="Entertainment">{t.categories.entertainment}</option>
-                        <option value="Shopping">{t.categories.shopping}</option>
-                        <option value="Housing">{t.categories.housing}</option>
-                        <option value="Utilities">{t.categories.utilities}</option>
-                        <option value="Other">{t.categories.other}</option>
+                        {defaultCategories.map((cat) => (
+                            <option key={cat.id} value={cat.id}>{cat.name}</option>
+                        ))}
+                        {existingCategories.filter(cat => !defaultCategories.some(dc => dc.id === cat)).map((cat) => (
+                            <option key={cat} value={cat}>{cat}</option>
+                        ))}
+                        <option value="NEW">+ {t.addNewCategory}</option>
                     </select>
+
+                    {isNewCategory && (
+                        <div className="animate-in slide-in-from-top-1 duration-200">
+                            <input
+                                type="text"
+                                autoFocus
+                                value={newCategoryName}
+                                onChange={(e) => setNewCategoryName(e.target.value)}
+                                placeholder={t.newCategoryPlaceholder}
+                                className="w-full bg-background/50 border border-primary/50 rounded-xl px-4 py-3 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200"
+                            />
+                        </div>
+                    )}
                 </div>
 
                 <div>
